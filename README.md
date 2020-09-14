@@ -1,12 +1,14 @@
 ######################################
 CNA 2일차 
 ######################################
+
 [주제] 주문/배송을 활용한 EventStorming 설계 및 CNA구현
 요건> 주문을 하면, 주문정보를 바탕으로 배송이 시작된다.
 요건> 고객이 주문취소를 하게 되면, 주문정보는 삭제되나,
         배송에서는 (사후, 활용 위해) 취소 장부를 별도 저장한다.
 요건> 주문 취소는 반드시 배송 취소가 전제대외야 한다.
 요건> 주문과 배송 MSA는 게이트웨이를 통해 고객과 통신한다.
+
 
 http://msaez.io/ 에서 NEW Project 수행.
 1. Event(주황색) 추가 (더블클릭후 속성 정의. Post Persist:DB에 저장되고 난 후)
@@ -16,7 +18,7 @@ http://msaez.io/ 에서 NEW Project 수행.
 4. 다운받은 소스에서 gateway에 resources/application.yml에서 predicates 부분에 ,로 구분해주기.
           predicates:
             - Path=/deliveries/**,/cancellations/**
-			
+					
 * 주키퍼 수행.
 D:\kafka_2.13-2.6.0\bin\windows\ 로 경로이동
 zookeeper-server-start.bat ../../config/zookeeper.properties
@@ -31,10 +33,12 @@ kafka-server-start.bat ../../config/server.properties
 http http://localhost:8081 (주문서버에 테스트)
 http POST http://localhost:8081/orders productId="1001" qty=5
 
+
 # shipped policy 구현하기
 * delivery > src > main > java > shop > PolicyHandler 에서 wheneverOrdered_Ship 메소드 구현.
     http://msaschool.io/#/%EC%84%A4%EA%B3%84--%EA%B5%AC%ED%98%84--%EC%9A%B4%EC%98%81%EB%8B%A8%EA%B3%84/04_%EA%B5%AC%ED%98%84/04_%EB%8F%84%EA%B5%AC(MSAEz)%EA%B8%B0%EB%B0%98%20CNA%EA%B5%AC%ED%98%84
     에서 step-6하기
+
 
 # OrderCanceled 에서 cancel command로 Req/Res(동기식) 호출하기
 * order > src > main > java > shop > external > CancellationService 에서 interface 구현.
@@ -67,6 +71,7 @@ api:
 api:
   url:
     delivery: http://delivery:8080
+	
 	
 # CLOUD에서 (MSAEZ terminal에서) 환경설정하기 (https://workflowy.com/s/msa/27a0ioMCzlpV04Ib#/06b292a9ac9d 참고)
 * 접속 : https://class-skcc.signin.aws.amazon.com/console
